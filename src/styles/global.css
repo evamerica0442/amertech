@@ -35,6 +35,10 @@
   --font-sans: 'Inter', 'Inter Fallback', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 
   --radius-card: 1rem;
+
+  /* The header row (7 nav links + CTA) needs ~1100px to stay on one line, so xl
+     is pulled in from the 1280px default: below it the nav is a hamburger menu. */
+  --breakpoint-xl: 1100px;
 }
 
 /* Self-hosted Inter (variable, latin subset) — no third-party font requests. */
@@ -95,6 +99,36 @@
 }
 
 @layer components {
+  /* Header nav — one size and weight for every link and dropdown trigger. */
+  .nav-link {
+    @apply inline-flex items-center gap-1 whitespace-nowrap rounded-md px-3 py-2 text-[15px] font-medium text-silver transition-colors;
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible,
+  .nav-group[data-open='true'] > .nav-link {
+    @apply text-white;
+  }
+
+  /* Opacity/translate animate; visibility must flip instantly so keyboard focus
+     can land on the panel links the moment a dropdown opens. */
+  .nav-menu {
+    @apply invisible absolute left-0 top-full z-50 w-72 translate-y-1 rounded-xl border border-slate-200 bg-white p-2 opacity-0 shadow-xl transition-[opacity,translate] duration-150;
+  }
+  .nav-group[data-open='true'] .nav-menu {
+    @apply visible translate-y-0 opacity-100;
+  }
+  .nav-group[data-open='true'] .nav-trigger-icon {
+    @apply rotate-180;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .nav-group:hover .nav-menu {
+      @apply visible translate-y-0 opacity-100;
+    }
+    .nav-group:hover .nav-trigger-icon {
+      @apply rotate-180;
+    }
+  }
+
   /* Subtle blue glow echoing the logo swoosh, for navy bands */
   .glow-navy {
     background:

@@ -3,35 +3,37 @@ import Logo from './Logo.astro';
 import Icon from '../ui/Icon.astro';
 import Button from '../ui/Button.astro';
 import MobileMenu from './MobileMenu.astro';
-import { mainNav, isGroup, type NavItem } from '../../data/navigation';
+import { mainNav, isGroup, type NavItem, type NavGroup } from '../../data/navigation';
+
+const menuId = (item: NavGroup) => `nav-menu-${item.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 ---
 
-<header class="sticky top-0 z-50 bg-navy/95 backdrop-blur supports-[backdrop-filter]:bg-navy/85 on-dark">
-  <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-    <a href="/" class="shrink-0 rounded focus-visible:outline-2" aria-label="America Technology Services — home">
+<header class="on-dark sticky top-0 z-50 border-b border-silver/30 bg-navy">
+  <div class="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+    <a href="/" class="shrink-0 rounded-md focus-visible:outline-2" aria-label="America Technology Services — home">
       <Logo />
     </a>
 
-    {/* Desktop navigation with CSS-only dropdowns (hover + focus-within). */}
-    <nav aria-label="Primary" class="hidden lg:block">
-      <ul class="flex items-center gap-1 text-[15px] font-semibold text-silver">
+    <nav aria-label="Primary" class="hidden xl:block">
+      <ul class="flex items-center gap-1">
         {
           mainNav.map((item) =>
             isGroup(item) ? (
-              <li class="group relative">
+              <li class="nav-group relative" data-nav-group>
                 <button
                   type="button"
-                  class="flex items-center gap-1 rounded-md px-3 py-2 text-white/90 hover:text-white group-focus-within:text-white"
+                  class="nav-link"
                   aria-expanded="false"
-                  data-dropdown
+                  aria-controls={menuId(item)}
+                  data-nav-trigger
                 >
                   {item.label}
-                  <Icon name="chevron-down" size={16} class="h-4 w-4 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
+                  <Icon name="chevron-down" size={16} class="nav-trigger-icon h-4 w-4 transition-transform" />
                 </button>
-                <ul class="invisible absolute left-0 top-full z-50 w-72 translate-y-1 rounded-xl border border-slate-200 bg-white p-2 opacity-0 shadow-xl transition-all group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                <ul id={menuId(item)} class="nav-menu" data-nav-menu>
                   {item.children.map((child: NavItem) => (
                     <li>
-                      <a href={child.href} class="block rounded-lg px-3 py-2 text-ink hover:bg-soft">
+                      <a href={child.href} class="block rounded-lg px-3 py-2 hover:bg-soft">
                         <span class="block font-semibold text-deep">{child.label}</span>
                         {child.description && <span class="mt-0.5 block text-sm font-normal text-slate-600">{child.description}</span>}
                       </a>
@@ -41,9 +43,7 @@ import { mainNav, isGroup, type NavItem } from '../../data/navigation';
               </li>
             ) : (
               <li>
-                <a href={(item as NavItem).href} class="block rounded-md px-3 py-2 hover:text-white">
-                  {(item as NavItem).label}
-                </a>
+                <a href={(item as NavItem).href} class="nav-link">{(item as NavItem).label}</a>
               </li>
             )
           )
@@ -51,20 +51,20 @@ import { mainNav, isGroup, type NavItem } from '../../data/navigation';
       </ul>
     </nav>
 
-    <div class="hidden lg:block">
-      <Button href="/health-check/" variant="onDark">Get a Health Check</Button>
+    <div class="hidden shrink-0 xl:block">
+      <Button href="/health-check/" variant="onDark" class="font-medium! whitespace-nowrap">Free Health Check</Button>
     </div>
 
-    {/* Mobile controls */}
     <button
       type="button"
-      class="inline-flex items-center justify-center rounded-md p-2 text-white lg:hidden"
+      class="inline-flex items-center justify-center rounded-md p-2 text-white xl:hidden"
       aria-expanded="false"
       aria-controls="mobile-menu"
       data-mobile-toggle
     >
-      <span class="sr-only">Open menu</span>
-      <Icon name="menu" size={26} class="h-7 w-7 [button[aria-expanded=true]_&]:hidden" />
+      <span class="sr-only">Menu</span>
+      <span data-icon="open"><Icon name="menu" size={26} class="h-7 w-7" /></span>
+      <span data-icon="close" class="hidden"><Icon name="x" size={26} class="h-7 w-7" /></span>
     </button>
   </div>
 
@@ -72,19 +72,72 @@ import { mainNav, isGroup, type NavItem } from '../../data/navigation';
 </header>
 
 <script>
-  const toggle = document.querySelector<HTMLButtonElement>('[data-mobile-toggle]');
-  const menu = document.getElementById('mobile-menu');
-  if (toggle && menu) {
-    toggle.addEventListener('click', () => {
-      const open = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!open));
-      menu.classList.toggle('hidden', open);
+  const groups = Array.from(document.querySelectorAll<HTMLElement>('[data-nav-group]'));
+
+  const setGroupOpen = (group: HTMLElement, open: boolean) => {
+    group.dataset.open = String(open);
+    group.querySelector<HTMLButtonElement>('[data-nav-trigger]')?.setAttribute('aria-expanded', String(open));
+  };
+
+  for (const group of groups) {
+    const trigger = group.querySelector<HTMLButtonElement>('[data-nav-trigger]');
+    if (!trigger) continue;
+
+    trigger.addEventListener('click', () => setGroupOpen(group, group.dataset.open !== 'true'));
+
+    group.addEventListener('mouseenter', () => setGroupOpen(group, true));
+    group.addEventListener('mouseleave', () => setGroupOpen(group, false));
+
+    /* Tab reaches the submenu links only while the panel is open, so opening it
+       with the keyboard also moves focus into it. */
+    trigger.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setGroupOpen(group, true);
+        group.querySelector<HTMLElement>('[data-nav-menu] a')?.focus();
+      }
+    });
+    group.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      setGroupOpen(group, false);
+      trigger.focus();
+    });
+    group.addEventListener('focusout', (event) => {
+      const next = event.relatedTarget;
+      if (next instanceof Node && !group.contains(next)) setGroupOpen(group, false);
     });
   }
-  // Keep desktop dropdown buttons honest for assistive tech.
-  document.querySelectorAll<HTMLButtonElement>('[data-dropdown]').forEach((btn) => {
-    const li = btn.closest('li');
-    li?.addEventListener('mouseenter', () => btn.setAttribute('aria-expanded', 'true'));
-    li?.addEventListener('mouseleave', () => btn.setAttribute('aria-expanded', 'false'));
+
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    for (const group of groups) if (!group.contains(target)) setGroupOpen(group, false);
+  });
+
+  const toggle = document.querySelector<HTMLButtonElement>('[data-mobile-toggle]');
+  const menu = document.getElementById('mobile-menu');
+  const openIcon = toggle?.querySelector('[data-icon="open"]');
+  const closeIcon = toggle?.querySelector('[data-icon="close"]');
+
+  const setMenuOpen = (open: boolean) => {
+    if (!toggle || !menu) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    menu.classList.toggle('hidden', !open);
+    openIcon?.classList.toggle('hidden', open);
+    closeIcon?.classList.toggle('hidden', !open);
+  };
+
+  toggle?.addEventListener('click', () => setMenuOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || toggle?.getAttribute('aria-expanded') !== 'true') return;
+    setMenuOpen(false);
+    toggle.focus();
+  });
+
+  /* Leaving the hamburger range would otherwise strand an open panel on screen. */
+  const desktop = window.matchMedia('(min-width: 1100px)');
+  desktop.addEventListener('change', (event) => {
+    if (event.matches) setMenuOpen(false);
   });
 </script>

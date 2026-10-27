@@ -25,13 +25,12 @@ export const areasNav: NavGroup = {
   children: areas.map((a) => ({ label: a.navLabel, href: a.path })),
 };
 
-/** Primary header navigation (excluding the "Get a Health Check" button). */
+/** Primary header navigation (excluding the "Free Health Check" button). */
 export const mainNav: (NavItem | NavGroup)[] = [
   servicesNav,
   { label: 'Websites', href: '/websites/' },
-  { label: 'IT & Security Health Check', href: '/health-check/' },
   areasNav,
-  { label: 'For MSPs', href: '/msp-partners/' },
+  { label: 'MSP Partners', href: '/msp-partners/' },
   { label: 'Resources', href: '/resources/' },
   { label: 'About', href: '/about/' },
   { label: 'Contact', href: '/contact/' },
