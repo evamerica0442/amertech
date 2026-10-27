@@ -1,0 +1,57 @@
+---
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import { site } from '../../config/site';
+---
+
+<LegalLayout
+  title="Terms of Service"
+  description="The terms governing use of the America Technology Services website and the engagement of our IT services — quotes, terms, ownership, liability and governing law."
+  path="/legal/terms/"
+>
+  <h2>1. About these terms</h2>
+  <p>
+    These terms govern your use of the {site.name} website and, unless a separate written agreement says otherwise, the
+    services we provide. Using this site means you accept them.
+    <span class="font-semibold text-warning-text"> [CONFIRM — a signed service agreement will override these for managed clients]</span>
+  </p>
+
+  <h2>2. Quotes and pricing</h2>
+  <p>
+    Prices shown for website packages are in South African Rand, exclude VAT where applicable, and are valid for 30 days
+    from the date of a quote. Managed-IT and Health-Check pricing is provided in a fixed quote and is not a standing
+    offer until agreed in writing.
+  </p>
+
+  <h2>3. Website packages</h2>
+  <p>
+    Website packages run on a 12-month minimum term, after which they may be cancelled with 30 days' notice. If you cancel
+    within the first 12 months, the normal setup fee becomes payable. You own your content and your domain. Two rounds of
+    changes are included before launch; further changes are billed at the published rates.
+  </p>
+
+  <h2>4. Scope and no-guarantee clause</h2>
+  <p>
+    We provide services with reasonable skill and care. We do not guarantee uninterrupted or error-free service, and we
+    do not publish response-time or uptime guarantees unless they are written into your specific agreement. Where we
+    assist with POPIA-ready IT controls, this is limited to the IT-controls side; POPIA compliance is broader and requires
+    legal advice from an attorney.
+  </p>
+
+  <h2>5. Client responsibilities</h2>
+  <p>
+    You are responsible for the accuracy of information you provide, for keeping your own records, and for authorising us
+    to access the systems we are engaged to manage. You remain responsible for lawful use of the systems we support.
+  </p>
+
+  <h2>6. Liability</h2>
+  <p>
+    To the maximum extent permitted by South African law, ATS is not liable for indirect or consequential loss arising
+    from use of this site or the services. Nothing excludes liability that cannot lawfully be excluded.
+  </p>
+
+  <h2>7. Governing law</h2>
+  <p>These terms are governed by the laws of the Republic of South Africa.</p>
+
+  <h2>8. Changes</h2>
+  <p>We may update these terms. The version on this page, with its "last updated" date, is the one that applies.</p>
+</LegalLayout>

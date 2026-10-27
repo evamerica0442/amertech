@@ -1,0 +1,50 @@
+---
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import { site } from '../../config/site';
+---
+
+<LegalLayout
+  title="PAIA Manual"
+  description="Placeholder Promotion of Access to Information Act (PAIA) manual for America Technology Services, describing how to request records and how to make a complaint."
+  path="/legal/paia/"
+>
+  <h2>Status: placeholder</h2>
+  <p>
+    This is a placeholder PAIA manual. Under the Promotion of Access to Information Act 2 of 2000, a private body must
+    compile and make available a manual describing the records it holds and the process for requesting them.
+    <span class="font-semibold text-warning-text"> [CONFIRM — this manual must be finalised and, where required, submitted to the Information Regulator before launch.]</span>
+  </p>
+
+  <h2>1. Introduction</h2>
+  <p>
+    {site.name} ("ATS") complies with POPIA and PAIA. This manual describes the records we hold, the access officer and
+    the process for making a request.
+  </p>
+
+  <h2>2. Records we hold</h2>
+  <ul>
+    <li>Contact and enquiry records submitted through this website.</li>
+    <li>Client service agreements, support tickets and reports generated in the course of IT services.</li>
+    <li>Business, financial and staff records kept as required by law.</li>
+  </ul>
+
+  <h2>3. How to make a request</h2>
+  <p>
+    A request for access to records held by ATS must be made in the prescribed form (Form 2), available from the
+    Information Regulator. Send it to our Information Officer:
+  </p>
+  <ul>
+    <li><strong>Information Officer:</strong> {site.infoOfficer}</li>
+    <li><strong>Email:</strong> {site.email}</li>
+    <li><strong>Postal/registered address:</strong> {site.address}</li>
+  </ul>
+
+  <h2>4. Fees and time limits</h2>
+  <p>Prescribed request fees and deposit amounts may apply, and ATS will respond within the timeframes set by PAIA.</p>
+
+  <h2>5. Complaints</h2>
+  <p>
+    If you are dissatisfied with our response, you may lodge a complaint with the Information Regulator of South Africa
+    (www.inforegulator.org.za), or approach the courts.
+  </p>
+</LegalLayout>

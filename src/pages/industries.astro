@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import Icon from '../components/ui/Icon.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import { industries } from '../data/industries';
+import { site } from '../config/site';
+---
+
+<BaseLayout
+  title="IT support by industry"
+  description="The top IT problems we see in wine estates, accounting practices, law firms, medical and dental practices, estate agents, schools and hospitality — and the ATS package that fits each."
+  path="/industries/"
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Industries', path: '/industries/' }]}
+>
+  <PageHero
+    eyebrow="Industries"
+    icon="briefcase"
+    title="IT that fits how your sector actually works"
+    intro="Different businesses break in different ways. Here are the problems we most often see by sector, and the package that solves them."
+    primaryCta={{ label: 'Get a Health Check', href: '/health-check/' }}
+  />
+
+  <Section tone="white">
+    <nav aria-label="Industries on this page" class="mb-12 rounded-2xl border border-slate-200 bg-soft p-5">
+      <p class="text-sm font-bold uppercase tracking-wider text-deep">Jump to</p>
+      <ul class="mt-3 flex flex-wrap gap-2">
+        {
+          industries.map((ind) => (
+            <li>
+              <a href={`#${ind.slug}`} class="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-ink ring-1 ring-slate-200 hover:ring-deep">
+                <Icon name={ind.icon} size={16} class="h-4 w-4 text-deep" /> {ind.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="space-y-14">
+      {
+        industries.map((ind, i) => (
+          <article id={ind.slug} class="scroll-mt-28">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-navy text-blue">
+                <Icon name={ind.icon} size={26} />
+              </span>
+              <h2 class="text-2xl font-extrabold text-ink sm:text-3xl">{ind.name}</h2>
+            </div>
+            <p class="mt-3 max-w-3xl text-slate-600">{ind.intro}</p>
+
+            <h3 class="mt-6 text-sm font-bold uppercase tracking-wider text-deep">Top three IT problems</h3>
+            <div class="mt-4 grid gap-4 md:grid-cols-3">
+              {ind.problems.map((p) => (
+                <div class="card h-full">
+                  <h4 class="font-bold text-ink">{p.title}</h4>
+                  <p class="mt-2 text-sm text-slate-600">{p.body}</p>
+                </div>
+              ))}
+            </div>
+
+            <div class={`mt-4 rounded-xl p-4 ${i % 2 ? 'bg-soft' : 'bg-[#eef4ff]'}`}>
+              <p class="text-sm text-slate-700">
+                <strong class="font-bold text-ink">The package that fits: </strong>
+                {ind.fit}
+              </p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </Section>
+
+  <CtaBand
+    title="Not sure which fits?"
+    body="A Health Check looks at your actual setup and tells you honestly what you need — no jargon, no upsell."
+    primary={{ label: 'Book a Health Check', href: '/health-check/' }}
+    secondary={{ label: 'WhatsApp us', href: site.whatsappUrl }}
+  />
+</BaseLayout>

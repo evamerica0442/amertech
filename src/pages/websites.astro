@@ -1,0 +1,205 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import CheckList from '../components/ui/CheckList.astro';
+import FaqAccordion from '../components/ui/FaqAccordion.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Icon from '../components/ui/Icon.astro';
+import { flags } from '../config/site';
+import {
+  websitePackages,
+  includedInAll,
+  businessAndGrowthExtras,
+  growthExtras,
+  whatMonthlyCovers,
+  terms,
+  addOns,
+  launchOffer,
+  currency,
+} from '../data/websitePackages';
+import { faqs } from '../data/faqs';
+
+const featureRows = websitePackages[0].features.map((f) => f.label);
+const cell = (pkg: (typeof websitePackages)[number], label: string) =>
+  pkg.features.find((f) => f.label === label)?.value ?? false;
+---
+
+<BaseLayout
+  title="Website packages for local businesses"
+  description="Simple, affordable websites for Grabouw and Elgin Valley businesses from R350/month — mobile-friendly, your own .co.za domain, hosting, SSL and a WhatsApp button included."
+  path="/websites/"
+  breadcrumbs={[
+    { name: 'Home', path: '/' },
+    { name: 'Websites', path: '/websites/' },
+  ]}
+  faqs={faqs.websites}
+>
+  <PageHero
+    eyebrow="Websites for local business"
+    icon="monitor"
+    title="A website your Grabouw & Elgin Valley customers can actually use"
+    intro="Simple, affordable and quick to start. Mobile-friendly, hosted and backed up for you, with your own .co.za domain, a WhatsApp button and click-to-call — so people can reach you from their phone."
+    primaryCta={{ label: 'Enquire about a website', href: '#enquire' }}
+  />
+
+  {
+    flags.showLaunchOffer && (
+      <div class="bg-success text-white">
+        <div class="mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
+          <Icon name="zap" size={22} class="h-5 w-5 shrink-0" />
+          <p class="text-sm font-semibold sm:text-base">
+            <strong>{launchOffer.headline}:</strong> {launchOffer.body}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  {/* Desktop comparison table */}
+  <Section tone="white">
+    <SectionHeading eyebrow="Packages" title="Compare the three packages" class="mb-10" />
+    <div class="hidden overflow-hidden rounded-2xl border border-slate-200 md:block">
+      <table class="w-full border-collapse text-left">
+        <thead>
+          <tr class="bg-navy text-white">
+            <th class="sticky left-0 top-0 z-10 bg-navy p-4 align-bottom">
+              <span class="text-sm font-semibold text-silver">Monthly fee</span>
+            </th>
+            {websitePackages.map((pkg) => (
+              <th class={`p-4 text-center ${pkg.popular ? 'bg-deep' : ''}`} scope="col">
+                {pkg.popular && <span class="mb-1 block text-xs font-bold uppercase tracking-wide">Most popular</span>}
+                <span class="block text-lg font-extrabold">{pkg.name}</span>
+                <span class="mt-1 block text-2xl font-extrabold">{currency(pkg.monthlyFee)}<span class="text-sm font-medium">/mo</span></span>
+                <span class="mt-1 block text-sm">
+                  {flags.showLaunchOffer ? (
+                    <>
+                      <span class="text-slate-300 line-through">{currency(pkg.setupFee)}</span> setup → <strong>R0</strong>
+                    </>
+                  ) : (
+                    <>{currency(pkg.setupFee)} setup</>
+                  )}
+                </span>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody class="text-sm">
+          {featureRows.map((row, i) => (
+            <tr class={i % 2 ? 'bg-soft' : 'bg-white'}>
+              <th class="sticky left-0 p-4 font-semibold text-ink" scope="row">{row}</th>
+              {websitePackages.map((pkg) => {
+                const v = cell(pkg, row);
+                return (
+                  <td class={`p-4 text-center ${pkg.popular ? 'bg-blue/5' : ''}`}>
+                    {typeof v === 'boolean' ? (
+                      v ? (
+                        <Icon name="check" size={20} class="mx-auto h-5 w-5 text-success" />
+                      ) : (
+                        <span class="text-slate-300" aria-label="Not included">—</span>
+                      )
+                    ) : (
+                      <span class="font-semibold text-ink">{v}</span>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+          <tr>
+            <th class="sticky left-0 p-4" scope="row"><span class="sr-only">Choose</span></th>
+            {websitePackages.map((pkg) => (
+              <td class={`p-4 text-center ${pkg.popular ? 'bg-blue/5' : ''}`}>
+                <a href="#enquire" class={`inline-flex items-center gap-1 rounded-full px-4 py-2 font-semibold ${pkg.popular ? 'bg-deep text-white' : 'border-2 border-deep text-deep hover:bg-deep hover:text-white'}`}>
+                  Choose {pkg.name}
+                </a>
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    {/* Mobile stacked cards */}
+    <div class="space-y-5 md:hidden">
+      {websitePackages.map((pkg) => (
+        <div class={`card ${pkg.popular ? 'ring-2 ring-deep' : ''}`}>
+          {pkg.popular && <span class="mb-1 inline-block rounded-full bg-deep px-3 py-0.5 text-xs font-bold uppercase text-white">Most popular</span>}
+          <h3 class="text-xl font-extrabold text-ink">{pkg.name}</h3>
+          <p class="mt-1 text-3xl font-extrabold text-deep">{currency(pkg.monthlyFee)}<span class="text-base font-medium text-slate-600">/mo</span></p>
+          <p class="text-sm text-slate-600">
+            {flags.showLaunchOffer ? (
+              <><span class="line-through">{currency(pkg.setupFee)}</span> setup → <strong class="text-success">R0</strong> on a 12-month plan</>
+            ) : (
+              <>{currency(pkg.setupFee)} setup fee</>
+            )}
+          </p>
+          <p class="mt-2 text-sm text-slate-600">{pkg.blurb}</p>
+          <ul class="mt-4 space-y-2 text-sm">
+            {pkg.features.map((f) => (
+              <li class="flex items-center justify-between gap-3 border-b border-slate-100 pb-2">
+                <span class="text-slate-600">{f.label}</span>
+                {typeof f.value === 'boolean' ? (
+                  f.value ? <Icon name="check" size={18} class="h-4 w-4 text-success" /> : <span class="text-slate-300">—</span>
+                ) : (
+                  <span class="font-semibold text-ink">{f.value}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+          <a href="#enquire" class="mt-4 block rounded-full bg-deep px-4 py-2.5 text-center font-semibold text-white">Choose {pkg.name}</a>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <Section tone="soft">
+    <div class="grid gap-10 md:grid-cols-2">
+      <div>
+        <h2 class="text-2xl font-extrabold text-ink">Included in all three</h2>
+        <div class="mt-4"><CheckList items={includedInAll} /></div>
+        <h3 class="mt-8 text-lg font-bold text-ink">Business &amp; Growth add</h3>
+        <div class="mt-3"><CheckList items={businessAndGrowthExtras} /></div>
+        <h3 class="mt-8 text-lg font-bold text-ink">Growth also adds</h3>
+        <div class="mt-3"><CheckList items={growthExtras} /></div>
+      </div>
+      <div>
+        <h2 class="text-2xl font-extrabold text-ink">What the monthly fee covers</h2>
+        <div class="mt-4"><CheckList items={whatMonthlyCovers} /></div>
+        <div class="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
+          <h3 class="text-lg font-bold text-ink">Add-ons</h3>
+          <ul class="mt-3 space-y-2 text-sm text-slate-700">
+            {addOns.map((a) => (
+              <li class="flex items-center justify-between gap-4 border-b border-slate-100 pb-2">
+                <span>{a.name}</span>
+                <span class="font-semibold text-deep">{a.price}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="white">
+    <div class="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-soft p-6 sm:p-8">
+      <h2 class="text-xl font-extrabold text-ink">Terms</h2>
+      <ul class="mt-4 space-y-2 text-sm text-slate-700">
+        {terms.map((t) => (
+          <li class="flex gap-2"><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-deep" /><span>{t}</span></li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section tone="soft">
+    <div class="mx-auto max-w-2xl">
+      <ContactForm id="enquire" source="websites" subject="Website package enquiry" heading="Enquire about a website" />
+    </div>
+  </Section>
+
+  <Section tone="white">
+    <FaqAccordion items={faqs.websites} />
+  </Section>
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+interface Props {
+  class?: string;
+  href?: string;
+}
+const { class: className = '', href } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+  class={`card block transition-shadow hover:shadow-md focus-within:shadow-md ${className}`}
+  href={href}
+>
+  <slot />
+</Tag>

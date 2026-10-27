@@ -1,0 +1,77 @@
+---
+import { site } from '../../config/site';
+import { absoluteUrl } from '../../lib/url';
+
+interface JsonLdObject {
+  [key: string]: unknown;
+}
+interface Props {
+  /** Breadcrumb trail: { name, path }. */
+  breadcrumbs?: { name: string; path: string }[];
+  /** FAQ items to emit as FAQPage. */
+  faqs?: { q: string; a: string }[];
+  /** Emit the ProfessionalService entity (home/about). */
+  service?: boolean;
+}
+const { breadcrumbs, faqs, service = false } = Astro.props;
+
+const graph: JsonLdObject[] = [];
+
+if (service) {
+  graph.push({
+    '@type': 'ProfessionalService',
+    '@id': absoluteUrl('/#business'),
+    name: site.name,
+    url: absoluteUrl('/'),
+    telephone: site.whatsappNumber,
+    email: site.email,
+    description: site.description,
+    areaServed: [
+      { '@type': 'AdministrativeArea', name: 'South Africa' },
+      { '@type': 'City', name: 'Grabouw' },
+      { '@type': 'City', name: 'Stellenbosch' },
+    ],
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: site.addressLocality,
+      addressCountry: site.addressCountry,
+      // Registered address is a placeholder until confirmed (see TODO.md).
+      streetAddress: '[CONFIRM registered address]',
+    },
+  });
+}
+
+if (breadcrumbs?.length) {
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((b, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: b.name,
+      item: absoluteUrl(b.path),
+    })),
+  });
+}
+
+if (faqs?.length) {
+  graph.push({
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  });
+}
+
+const doc = {
+  '@context': 'https://schema.org',
+  '@graph': graph,
+};
+---
+
+{
+  graph.length > 0 && (
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(doc)} />
+  )
+}

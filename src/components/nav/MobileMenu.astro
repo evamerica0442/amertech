@@ -1,0 +1,44 @@
+---
+import { mainNav, isGroup, type NavItem } from '../../data/navigation';
+import { site } from '../../config/site';
+import Icon from '../ui/Icon.astro';
+---
+
+<div id="mobile-menu" class="hidden border-t border-white/10 bg-navy lg:hidden on-dark">
+  <nav aria-label="Mobile" class="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6">
+    <ul class="space-y-1 text-white">
+      {
+        mainNav.map((item) =>
+          isGroup(item) ? (
+            <li class="py-1">
+              <p class="px-1 text-xs font-bold uppercase tracking-wider text-blue">{item.label}</p>
+              <ul class="mt-1 space-y-0.5 border-l border-white/10 pl-3">
+                {item.children.map((child: NavItem) => (
+                  <li>
+                    <a href={child.href} class="block rounded-md px-2 py-1.5 text-[15px] text-silver hover:bg-white/5 hover:text-white">
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ) : (
+            <li>
+              <a href={(item as NavItem).href} class="block rounded-md px-2 py-2 font-semibold hover:bg-white/5">
+                {(item as NavItem).label}
+              </a>
+            </li>
+          )
+        )
+      }
+    </ul>
+    <div class="mt-4 flex flex-col gap-2 border-t border-white/10 pt-4">
+      <a href="/health-check/" class="inline-flex items-center justify-center gap-2 rounded-full bg-blue px-5 py-2.5 font-semibold text-navy">
+        Get a Health Check
+      </a>
+      <a href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-2.5 font-semibold text-white">
+        <Icon name="whatsapp" size={18} /> WhatsApp {site.whatsappNumber}
+      </a>
+    </div>
+  </nav>
+</div>

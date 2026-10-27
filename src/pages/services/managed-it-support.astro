@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Section from '../../components/ui/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import CheckList from '../../components/ui/CheckList.astro';
+import ServiceCard from '../../components/ui/ServiceCard.astro';
+import FaqAccordion from '../../components/ui/FaqAccordion.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import { site } from '../../config/site';
+import { managedPackages } from '../../data/managedPackages';
+import { faqs } from '../../data/faqs';
+---
+
+<BaseLayout
+  title="Managed IT & Helpdesk support"
+  description="Fixed-price managed IT and helpdesk support for South African businesses. Computers, email, network and day-to-day tech, looked after by a named senior engineer."
+  path="/services/managed-it-support/"
+  breadcrumbs={[
+    { name: 'Home', path: '/' },
+    { name: 'Services', path: '/services/managed-it-support/' },
+    { name: 'Managed IT & Helpdesk', path: '/services/managed-it-support/' },
+  ]}
+  faqs={faqs['managed-it']}
+>
+  <PageHero
+    eyebrow="Managed IT & Helpdesk"
+    icon="headset"
+    title="Your outsourced IT department, on a fixed monthly fee"
+    intro="Computers, email, network and the day-to-day tech problems that eat your week — looked after by one accountable senior engineer you can ring or WhatsApp."
+    primaryCta={{ label: 'Get a fixed quote', href: '/health-check/' }}
+  />
+
+  <Section tone="white">
+    <SectionHeading eyebrow="What's included" title="Everything a small team needs, nothing it doesn't" align="left" class="mb-8" />
+    <div class="grid gap-10 lg:grid-cols-2">
+      <CheckList
+        columns={1}
+        items={[
+          'Remote helpdesk for laptops, desktops, phones and tablets',
+          'Microsoft 365 administration — users, licences, groups, mailboxes',
+          'Patch management for Windows and key applications',
+          'Endpoint protection and sensible firewall defaults',
+          'Backups with periodic, tested restores',
+          'New starter and leaver setup, done the same day',
+          'A plain-language report you can actually read',
+        ]}
+      />
+      <div class="rounded-2xl border border-slate-200 bg-soft p-6">
+        <h3 class="text-lg font-bold text-ink">How we respond</h3>
+        <p class="mt-2 text-slate-600">
+          You contact the engineer who does the work — by WhatsApp, email or phone. Urgent, business-stopping issues
+          jump the queue; routine requests are scheduled around your trading hours.
+        </p>
+        <p class="mt-3 rounded-lg bg-white p-3 text-sm text-slate-600 ring-1 ring-slate-200">
+          Specific response times and support hours are agreed in your service agreement.
+          <span class="font-semibold text-warning-text"> [CONFIRM response approach and hours]</span>
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="soft">
+    <SectionHeading eyebrow="Tiers" title="Three managed tiers" intro="Feature lists below. Pricing is confirmed in a fixed quote — no assumptions published." class="mb-10" />
+    <div class="grid gap-6 lg:grid-cols-3">
+      {
+        managedPackages.map((p) => (
+          <div class={`card flex h-full flex-col ${p.recommended ? 'ring-2 ring-deep' : ''}`}>
+            {p.recommended && (
+              <span class="mb-2 inline-flex w-fit rounded-full bg-deep px-3 py-0.5 text-xs font-bold uppercase tracking-wide text-white">
+                Most popular
+              </span>
+            )}
+            <h3 class="text-xl font-extrabold text-ink">{p.name}</h3>
+            <p class="mt-1 text-sm text-slate-600">{p.tagline}</p>
+            <ul class="mt-4 flex-1 space-y-2 text-sm text-slate-700">
+              {p.features.map((f) => (
+                <li class="flex gap-2">
+                  <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-deep" />
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+            <a href="/health-check/" class="mt-5 inline-flex items-center gap-1 font-semibold text-deep">
+              Get a fixed quote →
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section tone="white">
+    <SectionHeading eyebrow="Who it suits" title="A good fit if…" align="left" class="mb-8" />
+    <div class="grid gap-6 sm:grid-cols-3">
+      <ServiceCard icon="building" title="Owner-run, 2–50 staff" body="You have no internal IT person and the office manager should not be fixing the printer." />
+      <ServiceCard icon="cloud" title="On (or moving to) Microsoft 365" body="Email, Teams and files live in — or belong in — Microsoft 365 and you want it run properly." />
+      <ServiceCard icon="rand" title="Allergic to surprise bills" body="You want a fixed monthly number you can budget, and a named person who answers." />
+    </div>
+  </Section>
+
+  <Section tone="soft">
+    <FaqAccordion items={faqs['managed-it']} />
+  </Section>
+
+  <CtaBand
+    title="Get a fixed quote for managed IT"
+    body="Start with a free chat or an IT & Security Health Check. We will tell you honestly whether we are the right fit."
+    primary={{ label: 'Book a Health Check', href: '/health-check/' }}
+    secondary={{ label: 'WhatsApp us', href: site.whatsappUrl }}
+  />
+</BaseLayout>

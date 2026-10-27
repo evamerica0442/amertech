@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import CheckList from '../components/ui/CheckList.astro';
+import FaqAccordion from '../components/ui/FaqAccordion.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import Icon from '../components/ui/Icon.astro';
+import { site } from '../config/site';
+import { faqs } from '../data/faqs';
+---
+
+<BaseLayout
+  title="About ATS & the engineer behind it"
+  description="America Technology Services is a remote-first IT company based in Grabouw, Western Cape, run by one senior engineer with 18+ years across Microsoft 365, Entra ID, Intune, Windows Server and Active Directory."
+  path="/about/"
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about/' }]}
+  faqs={faqs.about}
+>
+  <PageHero
+    eyebrow="About"
+    icon="user"
+    title="One accountable engineer, not a call centre"
+    intro="ATS is a small, fully online IT company based in Grabouw in the Western Cape. When you hire us, you get me — the founder — doing the work."
+  />
+
+  <Section tone="white">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start">
+      <div>
+        <div class="flex aspect-square w-full max-w-sm items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-soft text-center">
+          <div>
+            <Icon name="user" size={48} class="mx-auto h-12 w-12 text-slate-400" />
+            <p class="mt-3 px-6 text-sm font-semibold text-slate-600">[PHOTO: add founder photo]</p>
+          </div>
+        </div>
+      </div>
+      <div class="prose-ats">
+        <h2 class="text-2xl font-extrabold text-ink">My story</h2>
+        <p class="mt-3 leading-relaxed text-slate-700">
+          I have spent more than 18 years in IT, and most of that time deep inside the Microsoft platform — Microsoft 365,
+          Entra ID and Intune administration at scale, Windows Server and Active Directory, and the unglamorous work of
+          keeping endpoints healthy across their whole lifecycle.
+        </p>
+        <p class="mt-3 leading-relaxed text-slate-700">
+          Along the way I picked up an AWS Solutions Architect Associate, AWS Cloud Practitioner and several Azure Applied
+          Skills certifications. But the qualification that matters most to my clients is simpler: they always know exactly
+          who is doing their work, and that person answers the phone.
+        </p>
+        <p class="mt-3 leading-relaxed text-slate-700">
+          I started ATS so owner-run South African businesses could get the kind of senior, MSP-style service delivery that
+          usually only big companies can afford — with clear agreements, fixed pricing and reporting you can actually read.
+          I speak Afrikaans natively and English, and I invoice locally.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="soft">
+    <div class="grid gap-10 md:grid-cols-2">
+      <div>
+        <SectionHeading eyebrow="Remote-first, honestly" title="What the model means for you" align="left" class="mb-6" />
+        <CheckList
+          columns={1}
+          items={[
+            'We work fully online and serve clients anywhere in South Africa.',
+            'On-site visits are by arrangement in the Western Cape.',
+            'Faster response: we reach into your systems the moment you allow us.',
+            'Lower overhead, which is part of why the pricing is fixed and fair.',
+          ]}
+        />
+      </div>
+      <div>
+        <SectionHeading eyebrow="How we work" title="The way ATS operates" align="left" class="mb-6" />
+        <ul class="space-y-3 text-slate-700">
+          <li class="flex gap-3"><Icon name="lock" size={20} class="mt-0.5 h-5 w-5 shrink-0 text-deep" /> <span><strong>Least-privilege access.</strong> We use named, MFA-protected admin accounts, and we ask for only the access a job needs.</span></li>
+          <li class="flex gap-3"><Icon name="shield" size={20} class="mt-0.5 h-5 w-5 shrink-0 text-deep" /> <span><strong>Your data stays yours.</strong> We do not resell it, and we handle it under the agreements we sign with you.</span></li>
+          <li class="flex gap-3"><Icon name="filecheck" size={20} class="mt-0.5 h-5 w-5 shrink-0 text-deep" /> <span><strong>Plain-language reporting.</strong> Every review ends in a summary you can act on, not a wall of acronyms.</span></li>
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="white">
+    <FaqAccordion items={faqs.about} />
+  </Section>
+
+  <CtaBand
+    title="Work with me directly"
+    body="If a named senior engineer at a fixed price sounds like what you need, let's have a chat."
+    primary={{ label: 'Get a Health Check', href: '/health-check/' }}
+    secondary={{ label: 'WhatsApp us', href: site.whatsappUrl }}
+  />
+</BaseLayout>

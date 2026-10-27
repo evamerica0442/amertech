@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import Meta from '../components/seo/Meta.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+import TopBar from '../components/nav/TopBar.astro';
+import Header from '../components/nav/Header.astro';
+import Footer from '../components/nav/Footer.astro';
+import Banner from '../components/Banner.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import MobileCallBar from '../components/MobileCallBar.astro';
+import { flags } from '../config/site';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  ogType?: 'website' | 'article';
+  breadcrumbs?: { name: string; path: string }[];
+  faqs?: { q: string; a: string }[];
+  service?: boolean;
+  showBanner?: boolean;
+  noindex?: boolean;
+}
+const {
+  title,
+  description,
+  path,
+  ogType,
+  breadcrumbs,
+  faqs,
+  service = false,
+  showBanner = true,
+  noindex = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-ZA">
+  <head>
+    <meta charset="utf-8" />
+    <Meta title={title} description={description} path={path} ogType={ogType} noindex={noindex} />
+    <JsonLd breadcrumbs={breadcrumbs} faqs={faqs} service={service} />
+    {
+      /* Analytics is opt-in and privacy-friendly; nothing loads unless the flag is on. */
+      flags.analyticsEnabled && (
+        <script is:inline src="/js/analytics.js" defer></script>
+      )
+    }
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-deep focus:px-4 focus:py-2 focus:text-white"
+    >
+      Skip to content
+    </a>
+
+    {showBanner && <Banner />}
+    <TopBar />
+    <Header />
+
+    <main id="main" class="flex-1 pb-20 sm:pb-0">
+      <slot />
+    </main>
+
+    <Footer />
+    <WhatsAppFloat />
+    <MobileCallBar />
+  </body>
+</html>

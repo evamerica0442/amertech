@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Section from '../../components/ui/Section.astro';
+import Icon from '../../components/ui/Icon.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import { resources } from '../../data/resources';
+import { site } from '../../config/site';
+---
+
+<BaseLayout
+  title="Resources & plain-language guides"
+  description="Practical, no-nonsense IT and security guides for owner-run South African businesses — from cyber basics to planning a Windows Server 2016 exit."
+  path="/resources/"
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Resources', path: '/resources/' }]}
+>
+  <PageHero
+    eyebrow="Resources"
+    icon="filecheck"
+    title="Straight answers, no jargon"
+    intro="Short guides we write for the questions clients actually ask. No fear-mongering, no statistics we cannot stand behind."
+    primaryCta={{ label: 'Get a Health Check', href: '/health-check/' }}
+  />
+
+  <Section tone="white">
+    <div class="grid gap-6 md:grid-cols-2">
+      {
+        resources.map((r) => (
+          <a href={r.path} class="card group flex h-full flex-col">
+            <div class="flex items-center justify-between">
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-soft text-deep"><Icon name="filecheck" size={24} /></span>
+              <span class="text-xs font-medium text-slate-400">{r.readMinutes} min read</span>
+            </div>
+            <h2 class="mt-4 text-xl font-extrabold text-ink group-hover:text-deep">{r.title}</h2>
+            <p class="mt-2 flex-1 text-slate-600">{r.description}</p>
+            <span class="mt-4 inline-flex items-center gap-1 font-semibold text-deep">
+              Read the guide <Icon name="arrow-right" size={16} class="transition-transform group-hover:translate-x-1" />
+            </span>
+          </a>
+        ))
+      }
+    </div>
+    <p class="mt-8 rounded-xl border border-dashed border-slate-300 bg-soft p-4 text-center text-sm text-warning-text">
+      These guides are first drafts marked <strong>[REVIEW BEFORE PUBLISHING]</strong> — see TODO.md.
+    </p>
+  </Section>
+
+  <CtaBand
+    title="Want this applied to your business?"
+    body="The Health Check turns general advice into a specific, prioritised plan for your setup."
+    primary={{ label: 'Book a Health Check', href: '/health-check/' }}
+    secondary={{ label: 'WhatsApp us', href: site.whatsappUrl }}
+  />
+</BaseLayout>

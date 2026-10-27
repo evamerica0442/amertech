@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Section from '../../components/ui/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import ServiceCard from '../../components/ui/ServiceCard.astro';
+import Steps from '../../components/ui/Steps.astro';
+import FaqAccordion from '../../components/ui/FaqAccordion.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { site, server2016 } from '../../config/site';
+import { faqs } from '../../data/faqs';
+
+/* VERIFY before publishing: Windows Server 2016 extended-support end date and ESU-via-Azure-Arc framing. */
+
+const options = [
+  { icon: 'server', title: 'Upgrade to Windows Server 2025', body: 'Same role, newer OS. More cost and a migration window, but the straightforward path where the software supports it.' },
+  { icon: 'cloud', title: 'Move to Azure / cloud', body: 'Run the workload on a supported cloud instance instead of an ageing on-prem box.' },
+  { icon: 'filecheck', title: 'Replace with SharePoint / OneDrive', body: 'For plain file shares, Microsoft 365 is often cheaper and simpler than a new server. The honest default for many offices.' },
+  { icon: 'clock', title: 'Buy time with ESU via Azure Arc', body: 'Extended Security Updates keep patches flowing after the cut-off — a stopgap while you migrate, not a permanent plan.' },
+] as const;
+
+const steps = [
+  { title: 'Exit Assessment (fixed fee)', body: 'We inventory what the server actually does, who depends on it and what would break — then recommend one honest option.' },
+  { title: 'Schedule realistically', body: 'We plan the move around your busy season and pilot with a small group before cutting everyone over.' },
+  { title: 'Migrate & decommission', body: 'Stand up the new service, move data, test restores, then harden or switch off the old server — not leave it running “just in case”.' },
+] as const;
+---
+
+<BaseLayout
+  title="Windows Server 2016 exit plan before January 2027"
+  description="Extended support for Windows Server 2016 ends 12 January 2027. A fixed-fee Exit Assessment and an honest migration plan: upgrade to 2025, move to Azure, replace with SharePoint/OneDrive, or buy time with ESU via Azure Arc."
+  path="/services/windows-server-2016-exit/"
+  breadcrumbs={[
+    { name: 'Home', path: '/' },
+    { name: 'Services', path: '/services/managed-it-support/' },
+    { name: 'Windows Server 2016 Exit', path: '/services/windows-server-2016-exit/' },
+  ]}
+  faqs={faqs['server2016']}
+>
+  <PageHero
+    eyebrow="Time-sensitive"
+    icon="server"
+    title={`Windows Server 2016 support ends ${server2016.endDate}`}
+    intro="After that date there are no free security updates, so an old server becomes progressively riskier — especially if it is reachable from the internet. Here are your four honest options."
+    primaryCta={{ label: 'Book a fixed-fee Exit Assessment', href: '/health-check/' }}
+  />
+
+  <Section tone="white">
+    <div class="mb-8 flex items-start gap-3 rounded-xl border-l-4 border-warning bg-[#fdf1e0] p-4 text-sm text-slate-700">
+      <Icon name="alert" size={22} class="mt-0.5 h-5 w-5 shrink-0 text-warning-text" />
+      <p>
+        <strong class="font-bold">What “end of support” means.</strong> Your server keeps running on
+        {' '}{server2016.endDate}. What stops is security patching — every new vulnerability found after that stays open
+        on your machine. An unsupported, internet-facing server is the most common way small businesses get owned.
+      </p>
+    </div>
+    <SectionHeading eyebrow="Your options" title="There are only four honest paths" class="mb-10" />
+    <div class="grid gap-6 sm:grid-cols-2">
+      {options.map((o) => <ServiceCard icon={o.icon} title={o.title} body={o.body} />)}
+    </div>
+  </Section>
+
+  <Section tone="soft">
+    <SectionHeading
+      eyebrow="How we help"
+      title="A fixed-fee Exit Assessment, then a plan you can trust"
+      intro="Migrations slip. The businesses that get into trouble start in November 2026 and hope to cut over in a weekend. We schedule this properly."
+      class="mb-10"
+    />
+    <Steps steps={steps} />
+    <p class="mx-auto mt-10 max-w-2xl rounded-xl bg-white p-4 text-center text-sm text-slate-600 ring-1 ring-slate-200">
+      The Exit Assessment price is a fixed fee.
+      <span class="font-semibold text-warning-text"> [CONFIRM Exit Assessment fee]</span>
+    </p>
+  </Section>
+
+  <Section tone="white">
+    <FaqAccordion items={faqs['server2016']} />
+  </Section>
+
+  <CtaBand
+    title="Still running Server 2016? Start now."
+    body="If your server is internet-facing, this is urgent. Book an Exit Assessment and get a realistic plan in writing."
+    primary={{ label: 'Book an Exit Assessment', href: '/health-check/' }}
+    secondary={{ label: 'WhatsApp us', href: site.whatsappUrl }}
+  />
+</BaseLayout>

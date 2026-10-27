@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Section from '../../components/ui/Section.astro';
+import Icon from '../../components/ui/Icon.astro';
+import FaqAccordion from '../../components/ui/FaqAccordion.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import { areas } from '../../data/areas';
+import { site } from '../../config/site';
+import { faqs } from '../../data/faqs';
+
+const homeBase = areas.find((a) => a.homeBase)!;
+const others = areas.filter((a) => !a.homeBase);
+---
+
+<BaseLayout
+  title="Areas we serve in the Western Cape & South Africa"
+  description="Remote-first managed IT, Microsoft 365 and security support for businesses across the Western Cape and beyond — with Grabouw and the Elgin Valley as home base."
+  path="/areas/"
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Areas', path: '/areas/' }]}
+  faqs={faqs.areas}
+>
+  <PageHero
+    eyebrow="Areas"
+    icon="map"
+    title="Local where it counts, remote where it works"
+    intro="We are based in Grabouw and serve clients anywhere in South Africa. These are the areas we know best — the businesses, the concerns and the service mix that fits each town."
+    primaryCta={{ label: 'Get a Health Check', href: '/health-check/' }}
+  />
+
+  <Section tone="white">
+    <a href={homeBase.path} class="card group flex flex-col gap-4 border-l-4 border-l-deep p-6 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-deep">Home base</p>
+        <h2 class="mt-1 text-2xl font-extrabold text-ink group-hover:text-deep">{homeBase.name}</h2>
+        <p class="mt-2 max-w-2xl text-slate-600">{homeBase.intro}</p>
+      </div>
+      <span class="inline-flex items-center gap-1 shrink-0 font-semibold text-deep">
+        Explore <Icon name="arrow-right" size={18} class="transition-transform group-hover:translate-x-1" />
+      </span>
+    </a>
+
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        others.map((a) => (
+          <a href={a.path} class="card group flex items-center justify-between gap-3 hover:shadow-md">
+            <span class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-soft text-deep"><Icon name="map" size={20} /></span>
+              <span class="font-semibold text-ink group-hover:text-deep">{a.name}</span>
+            </span>
+            <Icon name="arrow-right" size={18} class="h-4 w-4 shrink-0 text-slate-400 transition-transform group-hover:translate-x-1" />
+          </a>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section tone="soft">
+    <FaqAccordion items={faqs.areas} />
+  </Section>
+
+  <CtaBand
+    title="Not in one of these areas?"
+    body="We are remote-first and work with clients anywhere in South Africa. Get in touch and we will tell you honestly if we can help."
+    primary={{ label: 'Contact ATS', href: '/contact/' }}
+    secondary={{ label: 'WhatsApp us', href: site.whatsappUrl }}
+  />
+</BaseLayout>

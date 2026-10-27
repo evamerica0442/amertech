@@ -1,0 +1,16 @@
+---
+/**
+ * The mandated POPIA wording. Used wherever POPIA appears.
+ * Never claim ATS makes a business "POPIA compliant".
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<aside class={`rounded-xl border border-slate-200 bg-soft p-4 text-sm leading-relaxed text-slate-600 ${className}`}>
+  <strong class="font-bold text-ink">A note on POPIA.</strong> The IT controls we implement are only one part of POPIA
+  compliance. No service makes a business “POPIA compliant” on its own — we provide
+  <em>POPIA-ready IT controls</em> and document them for you. Legal advice comes from an attorney.
+</aside>

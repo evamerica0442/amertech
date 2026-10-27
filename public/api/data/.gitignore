@@ -1,0 +1,3 @@
+# Keep rate-limit/mock-mail data off the repo, but keep the folder.
+*
+!.gitignore

@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import TrustPoints from '../components/ui/TrustPoints.astro';
+import ServiceCard from '../components/ui/ServiceCard.astro';
+import Steps from '../components/ui/Steps.astro';
+import FaqAccordion from '../components/ui/FaqAccordion.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import { site, flags } from '../config/site';
+import { services } from '../data/services';
+import { areas } from '../data/areas';
+import { industries } from '../data/industries';
+import { faqs } from '../data/faqs';
+
+const heroTrust = [
+  { icon: 'user', label: 'A named senior engineer, not a call centre' },
+  { icon: 'rand', label: 'Fixed monthly price, agreed up front' },
+  { icon: 'shield', label: 'Secure by default' },
+  { icon: 'filecheck', label: 'POPIA-ready IT controls' },
+] as const;
+
+const whyCards = [
+  { icon: 'map', title: 'Local & accountable', body: 'Based in Grabouw, Western Cape. Afrikaans and English, a real person on WhatsApp, and South African invoicing.' },
+  { icon: 'shield', title: 'Secure by default', body: 'MFA on every account, patching, endpoint protection and tested backups — the basics, enforced.' },
+  { icon: 'filecheck', title: 'POPIA-ready controls', body: 'The IT side of protecting personal information, documented in plain language for your attorney.' },
+  { icon: 'rand', title: 'Fixed pricing', body: 'A set monthly fee for managed IT. No hourly surprises, no jargon invoices you cannot read.' },
+  { icon: 'chat', title: 'WhatsApp support', body: `Message the engineer who does the work. ${site.whatsappNumber}, answered on business days.` },
+  { icon: 'check', title: 'Free onboarding review', body: 'Before you commit, we review your current setup and tell you honestly what needs attention.' },
+] as const;
+
+const howItWorks = [
+  { title: 'Free chat', body: 'A no-obligation call or WhatsApp message. You describe the problem; we ask a few questions.' },
+  { title: 'Fixed-price Health Check', body: 'We review Microsoft 365, MFA gaps, admin accounts, backups and patching, and hand you a one-page risk summary.' },
+  { title: 'Ongoing managed support', body: 'If we are a fit, you get a fixed monthly price, a named engineer and plain-language reporting.' },
+] as const;
+---
+
+<BaseLayout
+  title="Managed IT, Microsoft 365 & security support in South Africa"
+  description="Secure, POPIA-ready Microsoft 365 and IT support for owner-run South African businesses, delivered by one accountable senior engineer at a fixed monthly price."
+  path="/"
+  service
+  faqs={faqs.home}
+  breadcrumbs={[{ name: 'Home', path: '/' }]}
+>
+  {/* Hero */}
+  <section class="glow-navy on-dark">
+    <div class="mx-auto grid w-full max-w-6xl gap-10 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[1.3fr_1fr] lg:items-center">
+      <div>
+        <p class="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm font-semibold text-blue">
+          <Icon name="map" size={16} /> Grabouw · Western Cape · serving all of South Africa
+        </p>
+        <h1 class="text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
+          Secure, POPIA-ready Microsoft 365 and IT support for owner-run businesses
+        </h1>
+        <p class="mt-5 max-w-xl text-lg text-silver">
+          Delivered by one accountable senior engineer, at a fixed monthly price — with plain-language reporting and
+          support on WhatsApp.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Button href="/health-check/" variant="onDark" size="lg" icon="arrow-right" iconRight>
+            Get a free IT &amp; Security Health Check
+          </Button>
+          <Button href={site.whatsappUrl} variant="whatsapp" size="lg" external icon="whatsapp">
+            WhatsApp us
+          </Button>
+        </div>
+      </div>
+      <div class="hidden lg:block">
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+          <p class="text-sm font-bold uppercase tracking-wider text-blue">Why owner-run businesses choose ATS</p>
+          <ul class="mt-4 space-y-3 text-silver">
+            <li class="flex gap-3"><Icon name="check" size={20} class="mt-0.5 h-5 w-5 shrink-0 text-blue" /> 18+ years’ experience with Microsoft 365, Entra ID and Intune at scale.</li>
+            <li class="flex gap-3"><Icon name="check" size={20} class="mt-0.5 h-5 w-5 shrink-0 text-blue" /> Windows Server, Active Directory and endpoint lifecycle management.</li>
+            <li class="flex gap-3"><Icon name="check" size={20} class="mt-0.5 h-5 w-5 shrink-0 text-blue" /> MSP-style service delivery with clear agreements.</li>
+            <li class="flex gap-3"><Icon name="check" size={20} class="mt-0.5 h-5 w-5 shrink-0 text-blue" /> AWS Solutions Architect &amp; Azure Applied Skills certified.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <div class="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+        <TrustPoints points={heroTrust} tone="dark" />
+      </div>
+    </div>
+  </section>
+
+  {/* Why ATS — 6 benefit cards */}
+  <Section tone="white">
+    <SectionHeading
+      eyebrow="Why ATS"
+      title="IT support that behaves like a person, not a ticket queue"
+      intro="Six promises that shape everything we do."
+      class="mb-10"
+    />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {whyCards.map((c) => <ServiceCard icon={c.icon} title={c.title} body={c.body} />)}
+    </div>
+  </Section>
+
+  {/* Services — 4-up */}
+  <Section tone="soft">
+    <SectionHeading
+      eyebrow="Services"
+      title="Managed IT, Microsoft 365 and security"
+      intro="The core of what we do. Websites for local businesses stay a simple, affordable secondary offer below."
+      class="mb-10"
+    />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {services.map((s) => (
+        <ServiceCard icon={s.icon} title={s.name} body={s.short} href={s.path} linkLabel="Explore" />
+      ))}
+    </div>
+  </Section>
+
+  {/* How it works — 3 steps */}
+  <Section tone="white">
+    <SectionHeading eyebrow="How it works" title="Three steps, no pressure" class="mb-10" />
+    <Steps steps={howItWorks} />
+  </Section>
+
+  {/* Websites teaser strip */}
+  <Section tone="soft">
+    <div class="grid items-center gap-8 rounded-2xl border border-slate-200 bg-white p-8 md:grid-cols-[1.5fr_1fr] md:p-10">
+      <div>
+        <p class="mb-2 text-sm font-bold uppercase tracking-wider text-deep">Also for Grabouw &amp; Elgin Valley</p>
+        <h2 class="text-2xl font-extrabold text-ink sm:text-3xl">Websites for local businesses</h2>
+        <p class="mt-3 text-slate-600">
+          Simple, affordable, quick to start — from R350/month with hosting, your own .co.za domain and a WhatsApp
+          button included.
+          {flags.showLaunchOffer && ' Setup fee waived on a 12-month plan during our launch offer.'}
+        </p>
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row md:flex-col">
+        <Button href="/websites/" variant="primary" size="lg" icon="arrow-right" iconRight>See website packages</Button>
+      </div>
+    </div>
+  </Section>
+
+  {/* Industries */}
+  <Section tone="white">
+    <SectionHeading
+      eyebrow="Industries"
+      title="We know how these businesses actually run"
+      intro="Pick your sector for the top IT problems we see and the package that fits."
+      class="mb-10"
+    />
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {industries.map((ind) => (
+        <a href={`/industries/#${ind.slug}`} class="card group flex items-center gap-3 hover:shadow-md">
+          <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-soft text-deep">
+            <Icon name={ind.icon} size={24} />
+          </span>
+          <span class="font-semibold text-ink group-hover:text-deep">{ind.name}</span>
+        </a>
+      ))}
+    </div>
+  </Section>
+
+  {/* Areas */}
+  <Section tone="soft">
+    <SectionHeading
+      eyebrow="Areas"
+      title="Remote-first, with the Western Cape close to home"
+      intro="We serve clients anywhere in South Africa. These are the areas we know best."
+      class="mb-10"
+    />
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {areas.map((a) => (
+        <a href={a.path} class="card group flex items-center justify-between gap-3 hover:shadow-md">
+          <span class="flex items-center gap-3">
+            <Icon name="map" size={22} class="h-5 w-5 shrink-0 text-deep" />
+            <span class="font-semibold text-ink group-hover:text-deep">{a.name}</span>
+          </span>
+          <Icon name="arrow-right" size={18} class="h-4 w-4 shrink-0 text-slate-400 transition-transform group-hover:translate-x-1" />
+        </a>
+      ))}
+    </div>
+  </Section>
+
+  {/* Testimonial placeholder */}
+  <Section tone="white">
+    <div class="mx-auto max-w-2xl rounded-2xl border border-dashed border-slate-300 bg-soft p-8 text-center">
+      <p class="text-sm font-bold uppercase tracking-wider text-warning-text">Placeholder — not for launch</p>
+      <p class="mt-2 text-slate-600">[TESTIMONIAL: add real client quote]</p>
+    </div>
+  </Section>
+
+  {/* FAQ */}
+  <Section tone="soft">
+    <FaqAccordion items={faqs.home} />
+  </Section>
+
+  {/* Final CTA band */}
+  <CtaBand
+    title="Not sure where to start?"
+    body="Book a free IT & Security Health Check. You get a one-page risk summary and a fixed quote if you want to continue — no obligation."
+    primary={{ label: 'Get a Health Check', href: '/health-check/' }}
+    secondary={{ label: 'WhatsApp us', href: site.whatsappUrl }}
+  />
+</BaseLayout>

@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import Icon from '../components/ui/Icon.astro';
+import { site } from '../config/site';
+
+const links = [
+  { label: 'Managed IT & Helpdesk', href: '/services/managed-it-support/' },
+  { label: 'Microsoft 365 & Intune', href: '/services/microsoft-365-intune/' },
+  { label: 'Security & POPIA-ready IT', href: '/services/security-popia-ready-it/' },
+  { label: 'Windows Server 2016 Exit', href: '/services/windows-server-2016-exit/' },
+  { label: 'IT & Security Health Check', href: '/health-check/' },
+  { label: 'Website packages', href: '/websites/' },
+  { label: 'For MSPs', href: '/msp-partners/' },
+  { label: 'Areas we serve', href: '/areas/' },
+  { label: 'Industries', href: '/industries/' },
+  { label: 'Resources', href: '/resources/' },
+  { label: 'About ATS', href: '/about/' },
+  { label: 'Contact', href: '/contact/' },
+];
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The page you were looking for could not be found. Jump to a popular ATS page or contact us for help."
+  path="/404.html"
+  noindex
+  showBanner={false}
+>
+  <Section tone="white">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class="text-7xl font-extrabold text-deep">404</p>
+      <h1 class="mt-2 text-3xl font-extrabold text-ink">We could not find that page</h1>
+      <p class="mt-3 text-slate-600">
+        The link may be out of date. Here is everything important — or just
+        <a href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" class="font-semibold text-success underline underline-offset-2">WhatsApp us</a>
+        and we will point you the right way.
+      </p>
+
+      <div class="relative mx-auto mt-8 max-w-md">
+        <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><Icon name="map" size={20} /></span>
+        <label for="find" class="sr-only">Find a page</label>
+        <input
+          id="find"
+          type="search"
+          placeholder="Type to find a page…"
+          class="w-full rounded-full border border-slate-300 py-3 pl-12 pr-4 text-ink focus:border-deep focus:outline-2 focus:outline-deep"
+          data-404-search
+        />
+      </div>
+
+      <ul class="mx-auto mt-8 grid max-w-2xl gap-3 text-left sm:grid-cols-2" data-404-list>
+        {
+          links.map((l) => (
+            <li data-search={l.label.toLowerCase()}>
+              <a href={l.href} class="card group flex items-center justify-between gap-3 py-4 hover:shadow-md">
+                <span class="font-semibold text-ink group-hover:text-deep">{l.label}</span>
+                <Icon name="arrow-right" size={18} class="h-4 w-4 shrink-0 text-slate-400 transition-transform group-hover:translate-x-1" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <script>
+    const input = document.querySelector<HTMLInputElement>('[data-404-search]');
+    const items = Array.from(document.querySelectorAll<HTMLElement>('[data-404-list] li'));
+    input?.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      items.forEach((li) => {
+        li.classList.toggle('hidden', q.length > 0 && !(li.dataset.search ?? '').includes(q));
+      });
+    });
+  </script>
+</BaseLayout>

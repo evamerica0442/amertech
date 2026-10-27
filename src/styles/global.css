@@ -1,0 +1,133 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   ATS design tokens
+   Palette (from brand brief):
+     navy   #050D1F  header / hero / footer backgrounds
+     blue   #2D8CFF  electric blue — accents, large text on dark
+     deep   #1B5FBF  primary buttons & text links (AA on white)
+     silver #C9D1DC  borders & secondary text on dark
+     page   #FFFFFF  body background
+     soft   #F4F7FB  alternating section background
+     ink    #0B1B33  body text
+     success #12805C | warning #B7791F
+   Contrast notes (WCAG AA):
+     --color-ink on white ≈ 16:1 · --color-deep on white ≈ 5.8:1
+     white on --color-deep ≈ 5.8:1 · --color-blue on navy ≈ 7.4:1 (large/bold)
+     --color-silver on navy ≈ 10:1 · --color-success on white > 4.5:1 ·
+     --color-warning is a fill/accent only; use --color-warning-text for text
+--------------------------------------------------------------------------- */
+@theme {
+  --color-navy: #050d1f;
+  --color-navy-soft: #0a1730;
+  --color-blue: #2d8cff;
+  --color-deep: #1b5fbf;
+  --color-silver: #c9d1dc;
+  --color-page: #ffffff;
+  --color-soft: #f4f7fb;
+  --color-ink: #0b1b33;
+  --color-success: #12805c;
+  --color-warning: #b7791f;
+  /* Darker amber for text/icons on light backgrounds: #b7791f is only 3.5:1 on
+     white, so body text uses this shade to meet WCAG AA (≈5.9:1 on white). */
+  --color-warning-text: #8a5a11;
+
+  --font-sans: 'Inter', 'Inter Fallback', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+
+  --radius-card: 1rem;
+}
+
+/* Self-hosted Inter (variable, latin subset) — no third-party font requests. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/inter-latin-wght-normal.woff2') format('woff2-variations');
+}
+
+/* Metric-adjusted local Arial: occupies ~the same space as Inter so the swap
+   causes negligible layout shift (keeps CLS < 0.1). */
+@font-face {
+  font-family: 'Inter Fallback';
+  font-style: normal;
+  font-weight: 100 900;
+  src: local('Arial');
+  size-adjust: 107%;
+  ascent-override: 90.5%;
+  descent-override: 21.5%;
+  line-gap-override: 0%;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-page font-sans text-ink;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-3 outline-offset-2 outline-deep;
+  }
+
+  /* Visible focus on dark bands */
+  .on-dark :focus-visible {
+    @apply outline-blue;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Subtle blue glow echoing the logo swoosh, for navy bands */
+  .glow-navy {
+    background:
+      radial-gradient(60% 80% at 80% 10%, rgb(45 140 255 / 0.14) 0%, transparent 60%),
+      radial-gradient(50% 70% at 10% 90%, rgb(27 95 191 / 0.22) 0%, transparent 65%),
+      var(--color-navy);
+  }
+
+  .card {
+    @apply rounded-card border border-slate-200 bg-white p-6 shadow-sm;
+  }
+
+  .link-deep {
+    @apply font-medium text-deep underline-offset-4 hover:underline;
+  }
+
+  /* Typography for hand-written legal / article prose in slots */
+  .prose-legal h2 {
+    @apply mt-8 mb-2 text-xl font-extrabold text-ink;
+  }
+  .prose-legal h3 {
+    @apply mt-6 mb-2 text-lg font-bold text-ink;
+  }
+  .prose-legal p {
+    @apply mt-3 leading-relaxed text-slate-700;
+  }
+  .prose-legal ul {
+    @apply mt-3 list-disc space-y-2 pl-6 text-slate-700;
+  }
+  .prose-legal a {
+    @apply font-medium text-deep underline underline-offset-4;
+  }
+  .prose-legal code {
+    @apply rounded bg-soft px-1.5 py-0.5 text-[0.9em] text-ink;
+  }
+}

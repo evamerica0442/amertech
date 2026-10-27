@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Steps from '../components/ui/Steps.astro';
+import FaqAccordion from '../components/ui/FaqAccordion.astro';
+import Icon from '../components/ui/Icon.astro';
+import WhatsAppQr from '../components/ui/WhatsAppQr.astro';
+import { site } from '../config/site';
+import { faqs } from '../data/faqs';
+
+const next = [
+  { title: 'We read it', body: 'Every enquiry reaches the founder directly — no ticket triage, no autoresponder maze.' },
+  { title: 'A short reply', body: 'On business days we reply with a couple of questions or a suggested time for a free chat.' },
+  { title: 'Free chat, then a quote', body: 'If we are a fit, you get a fixed-price Health Check or managed quote before anything starts.' },
+] as const;
+---
+
+<BaseLayout
+  title="Contact ATS"
+  description="Talk to America Technology Services. WhatsApp, email or send a message — a named senior engineer based in Grabouw, Western Cape, serving businesses across South Africa."
+  path="/contact/"
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }]}
+  faqs={faqs.contact}
+>
+  <PageHero
+    eyebrow="Contact"
+    icon="chat"
+    title="Talk to the person who will do the work"
+    intro="The fastest way to reach ATS is WhatsApp. Email and the form below work too — whichever you prefer."
+  />
+
+  <Section tone="white">
+    <div class="grid gap-10 lg:grid-cols-[1.3fr_1fr]">
+      <div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <a href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" class="card flex items-center gap-3 hover:shadow-md">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#e7f5ee] text-success"><Icon name="whatsapp" size={24} /></span>
+            <span>
+              <span class="block text-sm text-slate-600">WhatsApp</span>
+              <span class="block font-bold text-ink">{site.whatsappNumber}</span>
+            </span>
+          </a>
+          <a href={`mailto:${site.email}`} class="card flex items-center gap-3 hover:shadow-md">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-soft text-deep"><Icon name="mail" size={24} /></span>
+            <span>
+              <span class="block text-sm text-slate-600">Email</span>
+              <span class="block font-bold text-ink">{site.email}</span>
+            </span>
+          </a>
+          <div class="card flex items-center gap-3">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-soft text-deep"><Icon name="clock" size={24} /></span>
+            <span>
+              <span class="block text-sm text-slate-600">Business hours</span>
+              <span class="block font-bold text-ink">{site.hours}</span>
+            </span>
+          </div>
+          <div class="card flex items-center gap-3">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-soft text-deep"><Icon name="map" size={24} /></span>
+            <span>
+              <span class="block text-sm text-slate-600">Based in</span>
+              <span class="block font-bold text-ink">Grabouw, Western Cape</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <ContactForm source="contact" heading="Send a message" />
+        </div>
+      </div>
+
+      <aside class="space-y-8">
+        <div class="hidden justify-center lg:flex">
+          <WhatsAppQr />
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-soft p-6">
+          <h2 class="text-lg font-bold text-ink">What happens next</h2>
+          <div class="mt-4">
+            <Steps steps={next} />
+          </div>
+        </div>
+      </aside>
+    </div>
+  </Section>
+
+  <Section tone="soft">
+    <FaqAccordion items={faqs.contact} />
+  </Section>
+</BaseLayout>

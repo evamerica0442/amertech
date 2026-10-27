@@ -1,0 +1,43 @@
+---
+import Icon from './ui/Icon.astro';
+import { server2016 } from '../config/site';
+---
+
+<!-- VERIFY before publishing: Windows Server 2016 extended-support end date -->
+<div
+  id="server2016-banner"
+  class="bg-warning text-navy"
+  role="region"
+  aria-label="Important date notice"
+>
+  <div class="mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-2 text-sm sm:px-6">
+    <Icon name="alert" size={18} class="h-[18px] w-[18px] shrink-0" />
+    <p class="flex-1">
+      Windows Server 2016 extended support ends <strong>{server2016.endDate}</strong>. Security-led migration or
+      Extended Security Updates via Azure Arc can keep you covered.
+      <a href={server2016.pagePath} class="font-bold underline underline-offset-2 hover:no-underline">
+        See your options →
+      </a>
+    </p>
+    <button
+      type="button"
+      class="shrink-0 rounded p-1 hover:bg-black/10"
+      aria-label="Dismiss notice"
+      data-banner-dismiss
+    >
+      <Icon name="x" size={16} class="h-4 w-4" />
+    </button>
+  </div>
+</div>
+
+<script>
+  const KEY = 'ats-server2016-dismissed';
+  const banner = document.getElementById('server2016-banner');
+  if (banner) {
+    if (localStorage.getItem(KEY) === '1') banner.remove();
+    document.querySelector('[data-banner-dismiss]')?.addEventListener('click', () => {
+      localStorage.setItem(KEY, '1');
+      banner.remove();
+    });
+  }
+</script>

@@ -1,0 +1,12 @@
+# Dependencies / build
+node_modules/
+dist/
+.astro/
+
+# Local PHP form config (never commit real credentials/endpoints)
+public/api/config.php
+config.php
+
+# Editor / OS
+.DS_Store
+*.log

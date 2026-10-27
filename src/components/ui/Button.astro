@@ -1,0 +1,60 @@
+---
+import Icon from './Icon.astro';
+import { normalizePath } from '../../lib/url';
+
+type Variant = 'primary' | 'secondary' | 'ghost' | 'whatsapp' | 'onDark';
+type Size = 'md' | 'lg';
+
+interface Props {
+  href: string;
+  variant?: Variant;
+  size?: Size;
+  external?: boolean;
+  icon?: Parameters<typeof Icon>[0]['name'];
+  iconRight?: boolean;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  external = false,
+  icon,
+  iconRight = false,
+  class: className = '',
+  ariaLabel,
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors focus-visible:outline-3 focus-visible:outline-offset-2';
+
+const sizes: Record<Size, string> = {
+  md: 'px-5 py-2.5 text-[15px]',
+  lg: 'px-7 py-3.5 text-base',
+};
+
+const variants: Record<Variant, string> = {
+  primary: 'bg-deep text-white hover:bg-[#174f9e] focus-visible:outline-deep',
+  secondary:
+    'border-2 border-deep bg-transparent text-deep hover:bg-deep hover:text-white focus-visible:outline-deep',
+  ghost: 'text-deep hover:bg-soft focus-visible:outline-deep',
+  whatsapp: 'bg-success text-white hover:bg-[#0e664a] focus-visible:outline-success',
+  onDark: 'bg-blue text-navy hover:bg-white focus-visible:outline-white',
+};
+
+const resolvedHref = external ? href : normalizePath(href);
+---
+
+<a
+  href={resolvedHref}
+  class={`${base} ${sizes[size]} ${variants[variant]} ${className}`}
+  aria-label={ariaLabel}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+>
+  {icon && !iconRight && <Icon name={icon} size={18} class="h-[18px] w-[18px]" />}
+  <slot />
+  {icon && iconRight && <Icon name={icon} size={18} class="h-[18px] w-[18px]" />}
+</a>

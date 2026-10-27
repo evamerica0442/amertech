@@ -1,0 +1,19 @@
+---
+import Icon from './ui/Icon.astro';
+import { site } from '../config/site';
+---
+
+{/* Sticky bottom bar on mobile only. Hidden when the floating button would overlap (sm+). */}
+<div class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 border-t border-slate-200 bg-white text-sm shadow-[0_-2px_10px_rgba(0,0,0,0.06)] sm:hidden print:hidden">
+  <a
+    href={site.whatsappUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="flex items-center justify-center gap-2 py-3 font-bold text-success"
+  >
+    <Icon name="whatsapp" size={20} /> WhatsApp
+  </a>
+  <a href={site.phoneTel} class="flex items-center justify-center gap-2 border-l border-slate-200 py-3 font-bold text-deep">
+    <Icon name="phone" size={20} /> Call
+  </a>
+</div>

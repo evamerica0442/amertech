@@ -1,0 +1,43 @@
+---
+import { site } from '../../config/site';
+import { absoluteUrl } from '../../lib/url';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+}
+const { title, description, path, ogType = 'website', noindex = false } = Astro.props;
+const canonical = absoluteUrl(path);
+const ogImage = absoluteUrl('/brand/og-cover.png');
+const fullTitle = title.includes(site.name) ? title : `${title} | ${site.name}`;
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+<meta name="theme-color" content="#050D1F" />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+{/* Open Graph */}
+<meta property="og:site_name" content={site.name} />
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content="en_ZA" />
+
+{/* Twitter card */}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+<meta name="generator" content={Astro.generator} />

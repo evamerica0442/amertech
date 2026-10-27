@@ -1,0 +1,67 @@
+---
+import Logo from './Logo.astro';
+import Icon from '../ui/Icon.astro';
+import { footerColumns } from '../../data/navigation';
+import { site } from '../../config/site';
+---
+
+<footer class="bg-navy text-silver on-dark">
+  <div class="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6">
+    <div class="grid gap-10 lg:grid-cols-[1.4fr_repeat(5,1fr)]">
+      <div class="lg:col-span-1">
+        <Logo class="mb-4" />
+        <p class="max-w-xs text-sm leading-relaxed text-silver">{site.tagline}</p>
+        <ul class="mt-5 space-y-2 text-sm">
+          <li>
+            <a href={`mailto:${site.email}`} class="inline-flex items-center gap-2 hover:text-white">
+              <Icon name="mail" size={16} class="h-4 w-4 text-blue" /> {site.email}
+            </a>
+          </li>
+          <li>
+            <a href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:text-white">
+              <Icon name="whatsapp" size={16} class="h-4 w-4 text-blue" /> {site.whatsappNumber}
+            </a>
+          </li>
+          <li class="inline-flex items-start gap-2">
+            <Icon name="map" size={16} class="mt-0.5 h-4 w-4 shrink-0 text-blue" />
+            <span>{site.address}</span>
+          </li>
+        </ul>
+      </div>
+
+      {
+        footerColumns.map((col) => (
+          <nav aria-label={col.heading}>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-white">{col.heading}</h2>
+            <ul class="mt-4 space-y-2 text-sm">
+              {col.items.map((item) => (
+                <li>
+                  <a href={item.href} class="hover:text-white">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div class="mt-12 border-t border-white/10 pt-6 text-xs leading-relaxed text-slate-400">
+      <p>
+        {site.legalName} · CIPC reg. {site.cipc} · VAT: {site.vat} · Registered address: {site.address} ·
+        Information Officer: {site.infoOfficer}
+      </p>
+      <p class="mt-2">
+        © {new Date().getFullYear()} {site.name}. POPIA-ready IT controls are one part of POPIA compliance; legal
+        advice comes from an attorney.
+      </p>
+      <div class="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+        <a href="/legal/privacy/" class="inline-flex min-h-6 items-center hover:text-white">Privacy Policy</a>
+        <a href="/legal/terms/" class="inline-flex min-h-6 items-center hover:text-white">Terms of Service</a>
+        <a href="/legal/cookies/" class="inline-flex min-h-6 items-center hover:text-white">Cookie notice</a>
+        <a href="/legal/paia/" class="inline-flex min-h-6 items-center hover:text-white">PAIA manual</a>
+      </div>
+    </div>
+  </div>
+</footer>

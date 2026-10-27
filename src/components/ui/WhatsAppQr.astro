@@ -1,0 +1,23 @@
+---
+import { whatsappQrSvg } from '../../lib/qr';
+import { site } from '../../config/site';
+
+interface Props {
+  size?: number;
+  caption?: string;
+}
+const { size = 168, caption = 'Scan to chat on WhatsApp' } = Astro.props;
+const qr = await whatsappQrSvg(size);
+---
+
+<figure class="flex flex-col items-center gap-3 text-center">
+  <div
+    class="rounded-xl bg-white p-3 shadow-sm ring-1 ring-slate-200"
+    style={`width:${size + 24}px;height:${size + 24}px`}
+    role="img"
+    aria-label={`WhatsApp QR code linking to ${site.whatsappNumber}`}
+    set:html={qr}
+  />
+  <figcaption class="text-sm font-semibold text-ink">{caption}</figcaption>
+  <p class="text-xs text-slate-600">{site.whatsappNumber}</p>
+</figure>

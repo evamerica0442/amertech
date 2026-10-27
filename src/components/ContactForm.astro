@@ -1,0 +1,153 @@
+---
+import Icon from './ui/Icon.astro';
+import { site } from '../config/site';
+
+interface Props {
+  /** Hidden field tagging which page the enquiry came from. */
+  source?: string;
+  /** Optional pre-filled subject line. */
+  subject?: string;
+  /** Heading above the form. */
+  heading?: string;
+  id?: string;
+}
+const { source = 'general', subject = '', heading = 'Send a message', id = 'contact-form' } = Astro.props;
+---
+
+<div id={id} class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+  <h2 class="text-2xl font-extrabold text-ink">{heading}</h2>
+  <p class="mt-2 text-slate-600">
+    Prefer to talk now?
+    <a href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" class="font-semibold text-success underline underline-offset-2">
+      WhatsApp {site.whatsappNumber}
+    </a>
+    or email
+    <a href={`mailto:${site.email}`} class="font-semibold text-deep underline underline-offset-2">{site.email}</a>.
+  </p>
+
+  <form
+    name={source}
+    method="POST"
+    action={site.formEndpoint}
+    class="mt-6 space-y-4"
+    data-contact-form
+    novalidate
+  >
+    {/* Honeypot — humans never see or fill this; bots that do are rejected. */}
+    <div class="hidden" aria-hidden="true">
+      <label>
+        Do not fill this in
+        <input type="text" name="company_website" tabindex="-1" autocomplete="off" />
+      </label>
+    </div>
+    <input type="hidden" name="source" value={source} />
+    <input type="hidden" name="subject" value={subject} />
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label for={`${id}-name`} class="block text-sm font-semibold text-ink">Name *</label>
+        <input
+          id={`${id}-name`} name="name" type="text" required autocomplete="name"
+          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-ink focus:border-deep focus:outline-2 focus:outline-deep"
+        />
+      </div>
+      <div>
+        <label for={`${id}-email`} class="block text-sm font-semibold text-ink">Email *</label>
+        <input
+          id={`${id}-email`} name="email" type="email" required autocomplete="email"
+          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-ink focus:border-deep focus:outline-2 focus:outline-deep"
+        />
+      </div>
+      <div>
+        <label for={`${id}-phone`} class="block text-sm font-semibold text-ink">Phone</label>
+        <input
+          id={`${id}-phone`} name="phone" type="tel" autocomplete="tel"
+          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-ink focus:border-deep focus:outline-2 focus:outline-deep"
+        />
+      </div>
+      <div>
+        <label for={`${id}-business`} class="block text-sm font-semibold text-ink">Business name</label>
+        <input
+          id={`${id}-business`} name="business" type="text" autocomplete="organization"
+          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-ink focus:border-deep focus:outline-2 focus:outline-deep"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label for={`${id}-message`} class="block text-sm font-semibold text-ink">How can we help? *</label>
+      <textarea
+        id={`${id}-message`} name="message" required rows="5"
+        class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-ink focus:border-deep focus:outline-2 focus:outline-deep"
+      ></textarea>
+    </div>
+
+    <div>
+      <label class="flex items-start gap-3 text-sm text-slate-700">
+        <input type="checkbox" name="consent" required class="mt-1 h-4 w-4 shrink-0 accent-[#1B5FBF]" />
+        <span>
+          I consent to ATS storing my details to respond to this enquiry, as described in the
+          <a href="/legal/privacy/" class="font-semibold text-deep underline underline-offset-2">Privacy Policy</a>. *
+        </span>
+      </label>
+    </div>
+
+    {/* Status region — announced to assistive tech. */}
+    <p role="status" aria-live="polite" class="hidden rounded-lg px-4 py-3 text-sm font-semibold" data-form-status></p>
+
+    <button
+      type="submit"
+      class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-deep px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-[#174f9e] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-deep disabled:opacity-60 sm:w-auto"
+    >
+      <Icon name="mail" size={18} /> Send message
+    </button>
+    <p class="text-xs text-slate-600">* Required. We reply on business days. {site.hours}</p>
+  </form>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[data-form-status]');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      // Honeypot: if filled, silently pretend success.
+      const hp = form.querySelector<HTMLInputElement>('input[name="company_website"]');
+      if (hp && hp.value) {
+        show('Thanks — your message has been sent.', 'success');
+        form.reset();
+        return;
+      }
+      const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (btn) btn.disabled = true;
+      show('Sending…', 'pending');
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok !== false) {
+          show(data.message || 'Thanks — your message has been sent. We will reply on business days.', 'success');
+          form.reset();
+        } else {
+          show(data.error || 'Sorry, something went wrong. Please WhatsApp or email us instead.', 'error');
+        }
+      } catch {
+        show('Could not reach the server. Please WhatsApp ' + ' or email us instead.', 'error');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    });
+
+    function show(msg: string, kind: 'pending' | 'success' | 'error') {
+      if (!status) return;
+      status.textContent = msg;
+      status.classList.remove('hidden', 'bg-soft', 'text-deep', 'bg-[#e7f5ee]', 'text-success', 'bg-[#fdf1e0]', 'text-warning-text');
+      if (kind === 'success') status.classList.add('bg-[#e7f5ee]', 'text-success');
+      else if (kind === 'error') status.classList.add('bg-[#fdf1e0]', 'text-warning-text');
+      else status.classList.add('bg-soft', 'text-deep');
+    }
+  });
+</script>

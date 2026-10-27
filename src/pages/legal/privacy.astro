@@ -1,0 +1,84 @@
+---
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import { site } from '../../config/site';
+---
+
+<LegalLayout
+  title="Privacy Policy"
+  description="How America Technology Services collects, uses and protects your personal information under POPIA — what the contact form collects, purpose, operators, retention, your rights and the Information Regulator."
+  path="/legal/privacy/"
+>
+  <h2>1. Who we are</h2>
+  <p>
+    {site.name} ("ATS", "we", "us") is the responsible party for the personal information described in this policy.
+    Registered address: {site.address}. Information Officer: {site.infoOfficer}.
+    <span class="font-semibold text-warning-text"> [CONFIRM legal name, CIPC number, registered address, Information Officer]</span>
+  </p>
+
+  <h2>2. What we collect</h2>
+  <p>When you use the contact or enquiry form we collect only what you type into it:</p>
+  <ul>
+    <li>Your name and email address (required so we can reply).</li>
+    <li>An optional phone number and business name.</li>
+    <li>The message you write.</li>
+    <li>A consent record showing you agreed to be contacted.</li>
+  </ul>
+  <p>
+    We do <strong>not</strong> use advertising trackers, social pixels, or third-party analytics on this site, and we do
+    not load fonts or scripts from other companies' servers. If you email or WhatsApp us instead, we simply receive the
+    content you send.
+  </p>
+
+  <h2>3. Why we collect it (purpose)</h2>
+  <p>
+    We process your information only to respond to your enquiry, provide the IT services you ask for, and keep records
+    of our dealings with you. The legal basis is your consent (given via the form checkbox) and, where we have a contract
+    with you, the performance of that contract, as contemplated by POPIA.
+  </p>
+
+  <h2>4. Operators and third parties</h2>
+  <p>
+    To deliver this site and email we use a web host (Cloudflare Pages for the static site) and a cPanel mail host that
+    runs the form handler. These act as operators processing data on our behalf under our responsibility. We do not sell
+    your information. Where we use any other operator (for example a backup provider in the course of IT services), we
+    have an agreement that holds them to the same protections.
+  </p>
+
+  <h2>5. Retention</h2>
+  <p>
+    Enquiry messages are kept only as long as needed to respond and to keep a reasonable record of our business
+    dealings, after which they are deleted. Records we must keep for legal, tax or contractual reasons are retained for
+    the periods those laws require.
+  </p>
+
+  <h2>6. Security</h2>
+  <p>
+    We apply appropriate technical and organisational measures — such as HTTPS, access control and least-privilege
+    administration — to protect your information. No method of transmission or storage is perfectly secure, but we work
+    to protect your data in line with the reasonable precautions expected of a small IT provider.
+  </p>
+
+  <h2>7. Your rights (data subject)</h2>
+  <p>Under POPIA you may, at any time:</p>
+  <ul>
+    <li>Access the personal information we hold about you.</li>
+    <li>Ask us to correct or delete it.</li>
+    <li>Object to certain processing, or withdraw consent.</li>
+    <li>Ask that we stop processing, or that we delete records no longer needed.</li>
+  </ul>
+  <p>
+    To exercise a right, contact our Information Officer at {site.email}. We may need to verify your identity first.
+  </p>
+
+  <h2>8. Complaints</h2>
+  <p>
+    If you are unhappy with how we handle your information, you may complain to the Information Regulator of South
+    Africa (www.inforegulator.org.za). We would appreciate the chance to help first.
+  </p>
+
+  <h2>9. A note on POPIA compliance</h2>
+  <p>
+    The IT controls we implement for clients are only one part of POPIA compliance. Nothing in this policy, and no IT
+    service we provide, makes a business "POPIA compliant" on its own — legal advice on POPIA must come from an attorney.
+  </p>
+</LegalLayout>

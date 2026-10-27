@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import ServiceCard from '../components/ui/ServiceCard.astro';
+import Steps from '../components/ui/Steps.astro';
+import FaqAccordion from '../components/ui/FaqAccordion.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import { site } from '../config/site';
+import { faqs } from '../data/faqs';
+
+const models = [
+  { icon: 'filecheck', title: 'Per-ticket', body: 'Escalations billed per resolved ticket, with clear scope on each.' },
+  { icon: 'clock', title: 'Block hours', body: 'Pre-purchased hours drawn down as your bench — predictable cost, flexible use.' },
+  { icon: 'user', title: 'Part-time dedicated technician', body: 'A named specialist reserved for your clients on an agreed schedule.' },
+] as const;
+
+const steps = [
+  { title: 'Discovery call', body: 'We agree scope, tooling, documentation standards and escalation criteria.' },
+  { title: 'Mutual NDA & SLA', body: 'A clear agreement covering confidentiality, brand, response and hand-back.' },
+  { title: 'Free 5-hour pilot', body: 'Real tickets, under your brand, so you judge the work before committing.' },
+] as const;
+---
+
+<BaseLayout
+  title="White-label IT & Microsoft 365 support for MSPs"
+  description="White-label Tier 2/3 escalation and a Microsoft 365, Intune and Entra specialist bench for MSPs in the US, UK and Australia. Work inside your PSA, under your brand, with a free 5-hour pilot."
+  path="/msp-partners/"
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'For MSPs', path: '/msp-partners/' }]}
+  faqs={faqs.msp}
+>
+  <PageHero
+    eyebrow="For MSPs · US · UK · Australia"
+    icon="users"
+    title="A reliable Tier 2/3 bench your clients never see"
+    intro="White-label escalation and deep Microsoft 365, Intune and Entra ID specialism, delivered inside your PSA and under your brand — with a low-risk pilot before you commit."
+    primaryCta={{ label: 'Start a free 5-hour pilot', href: '/contact/' }}
+  />
+
+  <Section tone="white">
+    <SectionHeading eyebrow="What you get" title="Specialist capacity, without the headcount" class="mb-10" />
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <ServiceCard icon="shield" title="White-label Tier 2/3 escalation" body="Hand off the hard Microsoft 365, identity and endpoint tickets. Your clients see your brand and your name throughout." />
+      <ServiceCard icon="cloud" title="M365 / Intune / Entra specialist bench" body="18+ years administering these platforms at scale — Entra ID, conditional access, Intune, migrations and tenant clean-up." />
+      <ServiceCard icon="wrench" title="Work inside your PSA" body="We operate in your tooling — for example ConnectWise — and follow your documentation and ticketing standards." />
+      <ServiceCard icon="lock" title="Mutual NDA & clear SLA" body="Confidentiality both ways, and an agreement that defines scope, response and clean hand-back." />
+      <ServiceCard icon="globe" title="Time-zone overlap" body="Based in South Africa (SAST, UTC+2), overlapping US mornings, UK business hours and Australian early mornings. [CONFIRM hours]" />
+      <ServiceCard icon="rand" title="No partner-claim inflation" body="We do not misrepresent CSP or partner status. You get the technical depth; you keep the commercial relationship." />
+    </div>
+  </Section>
+
+  <Section tone="soft">
+    <SectionHeading eyebrow="Engagement models" title="Three ways to use the bench" class="mb-10" />
+    <div class="grid gap-6 sm:grid-cols-3">
+      {models.map((m) => <ServiceCard icon={m.icon} title={m.title} body={m.body} />)}
+    </div>
+    <p class="mx-auto mt-8 max-w-xl text-center text-sm text-slate-600">
+      No list prices are published here — commercial terms are agreed per partnership.
+    </p>
+  </Section>
+
+  <Section tone="white">
+    <SectionHeading eyebrow="How to start" title="Low-risk, on your terms" class="mb-10" />
+    <Steps steps={steps} />
+  </Section>
+
+  <Section tone="soft">
+    <FaqAccordion items={faqs.msp} />
+  </Section>
+
+  <CtaBand
+    title="Test us on real tickets"
+    body="Start with a free 5-hour pilot under your brand. If the work is not a fit, you have lost nothing."
+    primary={{ label: 'Request a pilot', href: '/contact/' }}
+    secondary={{ label: 'Email us', href: `mailto:${site.email}` }}
+  />
+</BaseLayout>

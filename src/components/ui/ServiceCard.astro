@@ -1,0 +1,33 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from './icons';
+
+interface Props {
+  icon: IconName;
+  title: string;
+  body: string;
+  href?: string;
+  linkLabel?: string;
+}
+const { icon, title, body, href, linkLabel = 'Learn more' } = Astro.props;
+const Wrapper = href ? 'a' : 'div';
+---
+
+<Wrapper
+  class="card group flex h-full flex-col"
+  href={href}
+>
+  <span class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-soft text-deep">
+    <Icon name={icon} size={26} />
+  </span>
+  <h3 class="text-lg font-bold text-ink">{title}</h3>
+  <p class="mt-2 flex-1 text-slate-600">{body}</p>
+  {
+    href && (
+      <span class="mt-4 inline-flex items-center gap-1 font-semibold text-deep">
+        {linkLabel}
+        <Icon name="arrow-right" size={16} class="h-4 w-4 transition-transform group-hover:translate-x-1" />
+      </span>
+    )
+  }
+</Wrapper>

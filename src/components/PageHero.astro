@@ -1,0 +1,89 @@
+---
+import Icon from './ui/Icon.astro';
+import type { IconName } from './ui/icons';
+import { normalizePath } from '../lib/url';
+import { site } from '../config/site';
+
+interface Crumb {
+  name: string;
+  path: string;
+}
+interface Props {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  icon?: IconName;
+  breadcrumbs?: Crumb[];
+  primaryCta?: { label: string; href: string };
+  whatsappCta?: { label: string };
+}
+const {
+  eyebrow,
+  title,
+  intro,
+  icon,
+  breadcrumbs,
+  primaryCta,
+  whatsappCta = { label: 'WhatsApp us' },
+} = Astro.props;
+---
+
+<section class="glow-navy on-dark">
+  <div class="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 md:py-20">
+    {
+      breadcrumbs && breadcrumbs.length > 0 && (
+        <nav aria-label="Breadcrumb" class="mb-5 text-sm text-silver">
+          <ol class="flex flex-wrap items-center gap-1">
+            {breadcrumbs.map((c, i) => (
+              <li class="flex items-center gap-1">
+                {i > 0 && <Icon name="chevron-down" size={14} class="h-3 w-3 -rotate-90 text-slate-600" />}
+                {i < breadcrumbs.length - 1 ? (
+                  <a href={normalizePath(c.path)} class="hover:text-white">{c.name}</a>
+                ) : (
+                  <span class="text-white" aria-current="page">{c.name}</span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+    <div class="flex items-start gap-4">
+      {
+        icon && (
+          <span class="hidden h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-blue sm:inline-flex">
+            <Icon name={icon} size={30} />
+          </span>
+        )
+      }
+      <div class="max-w-3xl">
+        {eyebrow && <p class="mb-2 text-sm font-bold uppercase tracking-wider text-blue">{eyebrow}</p>}
+        <h1 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl">{title}</h1>
+        {intro && <p class="mt-4 text-lg text-silver">{intro}</p>}
+        {
+          primaryCta && (
+            <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+              <a
+                href={normalizePath(primaryCta.href)}
+                class="inline-flex items-center justify-center gap-2 rounded-full bg-blue px-6 py-3 font-semibold text-navy transition-colors hover:bg-white"
+              >
+                {primaryCta.label}
+                <Icon name="arrow-right" size={18} />
+              </a>
+              {whatsappCta && (
+                <a
+                  href={site.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 font-semibold text-white hover:bg-white/10"
+                >
+                  <Icon name="whatsapp" size={18} /> {whatsappCta.label}
+                </a>
+              )}
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>

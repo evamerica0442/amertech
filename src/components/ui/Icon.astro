@@ -1,0 +1,28 @@
+---
+import { icons, type IconName } from './icons';
+interface Props {
+  name: IconName;
+  class?: string;
+  size?: number;
+  label?: string;
+}
+const { name, class: className = 'h-6 w-6', size = 24, label } = Astro.props;
+const decorative = !label;
+---
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={className}
+  aria-hidden={decorative ? 'true' : undefined}
+  role={decorative ? undefined : 'img'}
+  set:html={label ? `<title>${label}</title>` : ''}
+>
+  <Fragment set:html={icons[name]} />
+</svg>

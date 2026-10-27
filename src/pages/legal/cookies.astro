@@ -1,0 +1,47 @@
+---
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import { site, flags } from '../../config/site';
+---
+
+<LegalLayout
+  title="Cookie notice"
+  description="What cookies and local storage this site uses. In short: no advertising cookies, no third-party trackers — only a small amount of local storage for dismissing a notice."
+  path="/legal/cookies/"
+>
+  <h2>The short version</h2>
+  <p>
+    This website does <strong>not</strong> set advertising cookies, does not use social-media pixels, and does not load
+    third-party analytics, fonts or scripts. There is nothing here that tracks you across other websites.
+  </p>
+
+  <h2>What we do use</h2>
+  <ul>
+    <li>
+      <strong>Local storage (not a cookie):</strong> when you dismiss the "Windows Server 2016" notice banner, we remember
+      that choice in your browser's <code>localStorage</code> so the banner does not reappear. This never leaves your
+      device and is not shared with anyone.
+    </li>
+    <li>
+      <strong>Strictly necessary:</strong> the form uses a hidden honeypot field and basic validation to reduce spam. No
+      persistent identifier is stored on your device for this.
+    </li>
+  </ul>
+
+  <h2>Analytics</h2>
+  <p>
+    {
+      flags.analyticsEnabled
+        ? 'A privacy-friendly, self-hosted analytics script is currently enabled. It does not use cookies or build cross-site profiles.'
+        : 'Analytics are currently disabled. If we ever enable them, they will be a privacy-friendly, self-hosted tool with no cookies and no cross-site tracking, and this notice will be updated first.'
+    }
+  </p>
+
+  <h2>Your choices</h2>
+  <p>
+    Because we do not use tracking cookies, there is nothing to opt out of. You can clear your browser's stored site data
+    at any time to reset the banner dismissal.
+  </p>
+
+  <h2>Contact</h2>
+  <p>Questions? Email {site.email} or see our <a href="/legal/privacy/">Privacy Policy</a>.</p>
+</LegalLayout>
